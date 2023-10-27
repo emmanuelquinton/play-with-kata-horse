@@ -1,0 +1,39 @@
+{
+	"info": {
+		"_postman_id": "f974cb45-a244-402a-9da2-d181c6902b56",
+		"name": "kata-horse",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2635349"
+	},
+	"item": [
+		{
+			"name": "post offer Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"market\": \"PRIMARY_RESERVE\",\r\n  \"timeBlocks\": [\r\n    {\r\n      \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n      \"energyQuantity\": 35,\r\n      \"priceLimit\": 2500\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/offers",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"offers"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

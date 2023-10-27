@@ -1,0 +1,55 @@
+tasks.openApiGenerate.dependsOn tasks.openApiValidate
+compileJava.dependsOn tasks.openApiGenerate
+
+sourceSets {
+    main {
+        java {
+            srcDir file("$buildDir/generated-api/src/main/java")
+        }
+    }
+}
+
+
+openApiValidate {
+    inputSpec = "$rootDir/contract/kata-horse.openapi.yaml".toString()
+}
+
+openApiGenerate {
+    generatorName = "spring"
+    library = "spring-cloud"
+    inputSpec = "$rootDir/contract/kata-horse.openapi.yaml".toString()
+    outputDir = "$buildDir/generated-api".toString()
+    apiPackage = "equinton.dev.kata_horse.api.endpoint"
+    invokerPackage = "equinton.dev.kata_horse.config"
+    modelPackage = "equinton.dev.kata_horse.api.dto"
+    generateModelTests = false
+    generateApiTests = false;
+    modelNameSuffix= "Dto"
+    configOptions = [
+            openApiNullable: "true",
+            dateLibrary: "java8",
+            useOptional: "true",
+            hideGenerationTimestamp: "true",
+            interfaceOnly: "false",
+            useTags: "true",
+            swaggerDocketConfig: "false",
+            swaggerAnnotations: "false",
+            apiFirst: "false",
+            configPackage: "equinton.dev.kata_horse.config",
+            basePackage: "equinton.dev.kata.horse",
+            useSpringController: "false",
+            useSpringBoot3: "true",
+            performBeanValidation: "true",
+            useBeanValidation: "true"
+    ]
+}
+dependencies {
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+}
+
+project.afterEvaluate {
+    tasks.getByName("openApiGenerate") {
+        mustRunAfter(tasks.getByName("generateMainEffectiveLombokConfig2"))
+    }
+}

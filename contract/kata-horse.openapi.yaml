@@ -1,0 +1,118 @@
+openapi: "3.0.1"
+info:
+  title: "Kata Horse API"
+  version: "v1.0"
+servers:
+  - url: http://localhost:8088
+paths:
+  /api/v1/races:
+    post:
+      tags:
+        - races
+      summary: Add a new race
+      description: Add a new  race which must contains at least 3 runners
+      operationId: createRace
+      requestBody:
+        $ref: '#/components/requestBodies/RaceCreationRequest'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Race'
+        '400':
+          description: Business rules error or parameters validation fail
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+
+    Id:
+      type: string
+      format: uuid
+      readOnly: true
+      example: '62b97e34-5be5-11ee-8c99-0242ac120002'
+
+
+
+    Race:
+      description: Offer placed on the market and containing one or more time blocks
+      type: object
+      required:
+        - name
+        - number
+        - onDate
+      properties:
+        id:
+          description: Offer id
+          $ref: '#/components/schemas/Id'
+        name:
+          description: horse racing name
+          type: string
+          nullable: false
+          example: C2 Prix ALHENA
+        number:
+          description: horse racing number for the day
+          type: integer
+          format: number
+          nullable: false
+          example: 4
+        onDate:
+          type: string
+          description: Racing date
+          pattern: '^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$'
+          example: "2023-10-24"
+        runners:
+          $ref:  '#/components/schemas/Runners'
+          required: true
+
+    Runners:
+      description: List of runner
+      type: array
+      minItems: 3
+      items:
+        $ref: '#/components/schemas/Runner'
+      example:
+        - name: Aubepine
+          number: 1
+        - name: Black
+          number: 2
+        - name: Briston
+          number: 3
+
+
+
+    Runner:
+      description: A runner of horse racing
+      type: object
+      required:
+        - name
+        - number
+      properties:
+        id:
+          description: time block id
+          $ref: '#/components/schemas/Id'
+        name:
+          description: horse name
+          type: string
+          nullable: false
+          example: Aubepine
+        number:
+          description: horse number for the race
+          type: integer
+          format: number
+          nullable: false
+          example: 15
+
+
+  requestBodies:
+    RaceCreationRequest:
+      description: Offer to create
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Race'
+      required: true
+
